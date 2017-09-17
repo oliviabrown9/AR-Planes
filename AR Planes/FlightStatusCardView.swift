@@ -15,6 +15,7 @@ class FlightStatusCardView: UINibView {
     private(set) var flightInfo: Flight.FlightInformation?
     
     @IBOutlet weak var loadingCoverView: UIView!
+    @IBOutlet weak var loadingIndicator: UIView!
     @IBOutlet weak var privateFlightCoverView: UIView!
     @IBOutlet weak var privateFlightCallSignLabel: UILabel!
     
@@ -40,8 +41,8 @@ class FlightStatusCardView: UINibView {
         widthAnchor.constraint(equalToConstant: intrinsicContentSize.width).isActive = true
         heightAnchor.constraint(equalToConstant: intrinsicContentSize.height).isActive = true
         
-        layer.cornerRadius = 10.0
-        layer.masksToBounds = true
+        nibView.layer.cornerRadius = 10.0
+        nibView.layer.masksToBounds = true
     }
     
     override var intrinsicContentSize: CGSize {
@@ -77,6 +78,14 @@ class FlightStatusCardView: UINibView {
         departureTimeLabel?.text = info.departureTime
         destinationAirportLabel?.text = info.destinationAirportCode
         arrivalTimeLabel?.text = info.arrivalTime
+        
+        let distanceMeters = flight.location.distance(from: userLocation)
+        
+        if distanceMeters < 1000.0 {
+            distanceLabel.text = "\(Int(round(distanceMeters)))m"
+        } else {
+            distanceLabel.text = "\(Int(round(distanceMeters / 1000.0)))km"
+        }
         
         //load image from URL
         guard let logoImageView = self.logoImageView else { return }
@@ -118,6 +127,7 @@ class FlightStatusCardView: UINibView {
         case .loading:
             self.loadingCoverView.alpha = 1.0
             self.privateFlightCoverView.alpha = 0.0
+            self.loadingIndicator.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
         case .privateFlight(let callsign):
             self.loadingCoverView.alpha = 0.0
             self.privateFlightCoverView.alpha = 1.0
