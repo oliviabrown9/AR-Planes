@@ -16,7 +16,7 @@ import SceneKit.ModelIO
 
 class ViewController: UIViewController, ARSCNViewDelegate {
     
-    static let USE_JSON_STUB = true
+    static let USE_JSON_STUB = false
     
     let socket = WebSocket(url: URL(string: "ws://34.232.80.41/")!)
     private let serverPollingInterval = TimeInterval(5)
