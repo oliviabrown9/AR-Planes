@@ -45,7 +45,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             for flight in nearbyFlights {
                 //update existing node if it exists
                 if let existingNode = planeNodes[flight.icao] {
-                    let move = SCNAction.move(
+                    let move = SCNAction.move (
                         to: flight.sceneKitCoordinate(relativeTo: userLocation),
                         duration: serverPollingInterval)
                     
@@ -109,7 +109,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             {
                 return
             }
-            
             addInformationView(for: flight, in: planeNode)
         }
     }
@@ -227,7 +226,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let scene = SCNScene()
         sceneView.scene = scene
         sceneView.antialiasingMode = .multisampling2X
-        sceneView.delegate = self
         
         // Connect to web socket
         if !ViewController.USE_JSON_STUB {
