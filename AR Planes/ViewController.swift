@@ -98,14 +98,14 @@ class ViewController: UIViewController {
             for flight in nearbyFlights {
                 //update existing node if it exists
                 if let existingNode = planeNodes[flight.icao] {
-                    let move = SCNAction.move (
+                    let move = SCNAction.move(
                         to: flight.sceneKitCoordinate(relativeTo: userLocation),
                         duration: WebSocketManager.serverPollingInterval)
                     
                     existingNode.runAction(move)
                 }
-                
-                //otherwise, make a new node
+                    
+                    //otherwise, make a new node
                 else {
                     let newNode = newPlaneNode()
                     planeNodes[flight.icao] = newNode
@@ -132,7 +132,7 @@ class ViewController: UIViewController {
         planeMaterial.diffuse.contents = UIColor(white:0.88, alpha:1.0)
         planeMaterial.reflective.contents = #imageLiteral(resourceName: "night")
         planeNode.geometry?.materials = [planeMaterial]
-
+        
         let cylinder = SCNCylinder(radius: 30, height: 20)
         cylinder.firstMaterial?.diffuse.contents = UIColor.clear
         let largerNode = SCNNode(geometry: cylinder)
@@ -150,7 +150,7 @@ class ViewController: UIViewController {
         tapRecognizer.addTarget(self, action: #selector(handleTap(_:)))
         sceneView.gestureRecognizers = [tapRecognizer]
     }
-
+    
     @objc func handleTap(_ sender: UITapGestureRecognizer) {
         let location = sender.location(in: sceneView)
         
@@ -162,6 +162,7 @@ class ViewController: UIViewController {
             {
                 return
             }
+            
             addInformationView(for: flight, in: planeNode)
         }
     }
@@ -198,7 +199,7 @@ class ViewController: UIViewController {
                     statusCardView.updateForPrivateFlight(flight)
                     return
                 }
-
+                
                 statusCardView.update(
                     with: flight,
                     and: flightInfo,
@@ -208,85 +209,7 @@ class ViewController: UIViewController {
         
     }
     
-<<<<<<< HEAD
-    override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
-        super.motionEnded(motion, with: event)
-        
-        if motion == .motionShake,
-            let statusCardView = self.statusCardView,
-            let flight = statusCardView.flight,
-            let flightInfo = statusCardView.flightInfo
-        {
-            guard let origin = flightInfo.originAirport ?? flightInfo.originAirportCode,
-                let destination = flightInfo.destinationAirport ?? flightInfo.destinationAirportCode else
-            {
-                return
-            }
-            
-            var messageString = "from \(origin) to \(destination)"
-            
-            if let aircraftType = flightInfo.aircraftType {
-                messageString += " on a \(aircraftType)."
-            } else {
-                messageString += "."
-            }
-            
-            let alert = UIAlertController(
-                title: flight.callsign,
-                message: messageString,
-                preferredStyle: .alert)
-            
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-        }
-    }
-    
-    // MARK: - Lifecycle
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        sceneView.delegate = self
-        
-        let scene = SCNScene()
-        sceneView.scene = scene
-        sceneView.antialiasingMode = .multisampling2X
-        
-        // Connect to web socket
-        if !ViewController.USE_JSON_STUB {
-            socket.onText = self.websocketDidReceiveMessage(text:)
-            socket.onConnect = self.websocketDidConnect
-            socket.onDisconnect = self.websocketDidDisconnect
-            socket.onData = self.websocketDidReceiveData(data:)
-            socket.connect()
-        }
-        
-        setupTap()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // Create a session configuration
-        let configuration = ARWorldTrackingConfiguration()
-        configuration.worldAlignment = .gravityAndHeading
-        sceneView.session.run(configuration)
-        setUpLocationManager()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        sceneView.session.pause()
-    }
-}
-
-// MARK: - ARSCNViewDelegate
-
-extension ViewController /*: ARSCNViewDelegate */ {
-    
-    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-=======
     func updatePositionOfStatusCardView() {
->>>>>>> Hack-the-North-2017/master
         guard let statusCardView = self.statusCardView,
             let flight = statusCardView.flight,
             let node = planeNodes[flight.icao] else
@@ -319,7 +242,6 @@ extension ViewController /*: ARSCNViewDelegate */ {
 }
 
 // MARK: - ARSCNViewDelegate
-
 extension ViewController: ARSCNViewDelegate {
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
@@ -329,7 +251,6 @@ extension ViewController: ARSCNViewDelegate {
 }
 
 // MARK: - CLLocationManagerDelegate
-
 extension ViewController: CLLocationManagerDelegate {
     
     func setUpLocationManager() {
